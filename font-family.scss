@@ -2,15 +2,20 @@
 /// @component font-family
 ///
 
+// @variables
+
 $font-family: 'Roboto';
 $font-path: './assets/fonts';
 $font-weight: (300, 400, 700);
 $font-style: (normal, italic);
 $font-format: (ttf);
 
-@function get-url($src) {
+// @param $src
+// @type: string;
+// @default null;
+@function append-url($src) {
 	$url: ();
-    $enable-formats: ( woff: 'woff', otf: 'opentype', ttf: 'truetype', svg: 'svg');
+    	$enable-formats: ( woff: 'woff', otf: 'opentype', ttf: 'truetype', svg: 'svg');
 
     @each $format in $font-format {
         @if (not map-get($enable-formats, $format)) {
@@ -34,19 +39,25 @@ $font-format: (ttf);
         @if(type-of($weight) !=number) {
             @error '"#{$weight}" is not a number';
         }
-		
-		$family: to-lower-case($font-family);
 
+	// $family should lower case string set in $font-family,
+	// example: "roboto";	    
+	$family: to-lower-case($font-family);
+	// $src should concatenate coresponding path and file name,
+	// example: "./assets/fonts/roboto/roboto-400-normal";
         $src: '#{$font-path}/#{$family}/#{$family}-#{$weight}-#{$style}';
 
         @font-face {
             font-family: $font-family;
             font-weight: $weight;
             font-style: $style;
-            @if($font-format==eot) {
-                src: url('#{$src}.eot?#iefix') format('embedded-opentype');
+		
+            @if($font-format == eot) {
+                // special case for "eot" format, 
+		// if eot is defined in $font-format array, should set resource
+		src: url('#{$src}.eot?#iefix') format('embedded-opentype');
             }
-            src: get-url($src);
+            src: append-url($src);
         }
     }
 }
