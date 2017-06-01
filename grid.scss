@@ -1,0 +1,23 @@
+///
+/// @component grid
+///
+
+@mixin row($wrap) {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: $wrap;
+}
+
+@mixin column($wrap) {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: $wrap;
+}
+
+@mixin content-width($max-width: 1200px, $padding: 2rem) {
+    margin: 0 auto;
+    max-width: $max-width;
+    padding-left: $padding;
+    padding-right: $padding;
+    width: 100%;
+}
