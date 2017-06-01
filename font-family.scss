@@ -1,0 +1,52 @@
+///
+/// @component font-family
+///
+
+$font-family: 'Roboto';
+$font-path: './assets/fonts';
+$font-weight: (300, 400, 700);
+$font-style: (normal, italic);
+$font-format: (ttf);
+
+@function get-url($src) {
+	$url: ();
+    $enable-formats: ( woff: 'woff', otf: 'opentype', ttf: 'truetype', svg: 'svg');
+
+    @each $format in $font-format {
+        @if (not map-get($enable-formats, $format)) {
+            @error '"#{$format}" is not valid format';
+        }
+
+        $append: url(quote($src + '.' + $format)) format(quote(map-get($enable-formats, $format)));
+        $url: append($url, $append, comma);
+    }
+
+    @return $url;
+}
+
+@each $style in $font-style {
+    @if($style !=normal and $style !=italic and $style !=oblique) {
+        @error '"#{$style}" is not property value for "font-style"';
+    }
+
+    @each $weight in $font-weight {
+
+        @if(type-of($weight) !=number) {
+            @error '"#{$weight}" is not a number';
+        }
+		
+		$family: to-lower-case($font-family);
+
+        $src: '#{$font-path}/#{$family}/#{$family}-#{$weight}-#{$style}';
+
+        @font-face {
+            font-family: $font-family;
+            font-weight: $weight;
+            font-style: $style;
+            @if($font-format==eot) {
+                src: url('#{$src}.eot?#iefix') format('embedded-opentype');
+            }
+            src: get-url($src);
+        }
+    }
+}
