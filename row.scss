@@ -1,0 +1,26 @@
+///
+/// @component row
+///
+
+// @param $justify: type: string; default: undefined; options: ['center', 'flex-start', 'flex-end', 'space-around', 'space-between'];
+@function justify-content($justify) {
+    $justify-options: ('center', 'flex-start', 'flex-end', 'space-around', 'space-between');
+
+    @if (not index($justify-options, $justify)) {
+      @error '"#{$justify}" is not property value for "justify-content"';
+    }
+
+    @return $justify;
+}
+
+// @param $wrap; type: string; default: undefined;
+// @param $justify: type: string; default: null;
+@mixin row($wrap, $justify: null) {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: $wrap;
+    
+    @if ($justify) {
+        justify-content: justify-content($justify);
+    }
+}
